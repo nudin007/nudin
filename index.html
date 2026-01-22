@@ -8,9 +8,9 @@
 
 <style>
 :root{
---primary:#4f46e5;--primary-hover:#4338ca;--bg:#f8fafc;--card:#fff;
---text-main:#1e293b;--text-sub:#64748b;--border:#e2e8f0;
---shadow:0 10px 25px -5px rgba(0,0,0,.1),0 8px 10px -6px rgba(0,0,0,.1);
+--primary:#4f46e5;--primary-hover:#4338ca;--bg:#f4f6fb;--card:#ffffff;
+--text-main:#1e293b;--text-sub:#64748b;--border:#e5e7eb;
+--shadow:0 10px 25px rgba(0,0,0,.08);
 --cls-study:#10b981;--cls-homework:#f59e0b;--cls-personal:#ec4899;
 }
 *{box-sizing:border-box;font-family:'Prompt',sans-serif}
@@ -19,59 +19,146 @@ body{margin:0;background:var(--bg);color:var(--text-main)}
 /* LOGIN */
 .login-page{display:flex;justify-content:center;align-items:center;height:100vh;
 background:linear-gradient(135deg,#667eea,#764ba2)}
-.login-box{background:#fff;padding:40px;border-radius:25px;max-width:380px;width:90%;text-align:center}
-.login-box input,button{width:100%;padding:14px;margin-bottom:12px;border-radius:14px}
+.login-box{background:#fff;padding:40px;border-radius:28px;width:90%;max-width:380px}
 
 /* APP */
-#app{display:none;padding:20px}
-.container{max-width:1200px;margin:auto;background:var(--card);
-padding:25px;border-radius:30px;box-shadow:var(--shadow)}
+#app{display:none;padding:16px}
+.container{max-width:1100px;margin:auto;background:var(--card);
+padding:20px;border-radius:32px;box-shadow:var(--shadow)}
 
-header{text-align:center;margin-bottom:20px}
-header h1{color:var(--primary)}
+header{text-align:center;margin-bottom:15px}
+header h1{color:var(--primary);margin:0}
 
 /* SUMMARY */
-.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
-.stat{background:var(--bg);padding:15px;border-radius:18px;text-align:center}
+.summary{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-bottom:15px
+}
+.stat{
+background:#f8fafc;
+padding:12px;
+border-radius:16px;
+text-align:center;
+font-size:14px
+}
 
 /* CONTROLS */
-.controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-.month-nav{display:flex;align-items:center;gap:10px}
-#monthYear{font-size:1.2rem;font-weight:600}
+.controls{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-bottom:10px
+}
+.month-nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px
+}
+.month-nav button{
+flex:1;
+padding:12px;
+border-radius:14px;
+border:none;
+font-size:18px;
+background:#eef2ff
+}
+#monthYear{
+flex:2;
+text-align:center;
+font-weight:600;
+font-size:1.2rem
+}
+.controls > button{
+padding:12px;
+border-radius:16px;
+border:none;
+background:#fee2e2;
+color:#b91c1c;
+font-weight:600
+}
 
-/* CALENDAR DESKTOP */
-.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin-top:20px}
-.day-header{text-align:center;font-weight:600;color:var(--text-sub)}
-.day-cell{border:1px solid var(--border);border-radius:18px;min-height:120px;padding:10px}
-.weekend{background:#fcfcfd}
+/* CALENDAR */
+.calendar{
+display:flex;
+flex-direction:column;
+gap:12px
+}
+.day-header{display:none}
+
+.day-cell{
+background:#fff;
+border-radius:22px;
+padding:14px;
+box-shadow:0 6px 15px rgba(0,0,0,.06)
+}
+.weekend{border-left:4px solid #e0e7ff}
 
 /* DATE */
-.date{font-weight:600;display:flex;justify-content:space-between}
-.today-mark{background:var(--primary);color:#fff;border-radius:50%;width:28px;height:28px;
-display:flex;align-items:center;justify-content:center}
+.date{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:1.1rem;
+font-weight:600;
+margin-bottom:6px
+}
+.today-mark{
+background:var(--primary);
+color:#fff;
+width:34px;height:34px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center
+}
 
 /* ACTIVITY */
-.activity{margin-top:6px;padding:6px 26px 6px 8px;border-radius:10px;
-color:#fff;font-size:11px;position:relative}
+.activity{
+margin-top:6px;
+padding:6px 30px 6px 10px;
+border-radius:999px;
+color:#fff;
+font-size:12px;
+position:relative
+}
 .study{background:var(--cls-study)}
 .homework{background:var(--cls-homework)}
 .personal{background:var(--cls-personal)}
-.edit,.delete{position:absolute;top:50%;transform:translateY(-50%);font-size:12px;cursor:pointer}
-.edit{right:20px}.delete{right:6px}
+.edit,.delete{
+position:absolute;
+top:50%;
+transform:translateY(-50%);
+font-size:13px
+}
+.edit{right:22px}.delete{right:8px}
 
 /* MODAL */
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999}
-.modal-content{background:#fff;width:90%;max-width:420px;margin:10vh auto;
-padding:25px;border-radius:25px}
+.modal-content{
+background:#fff;
+height:100vh;
+padding:20px;
+border-radius:0
+}
+.modal-content input,
+.modal-content select,
+.modal-content button{
+width:100%;
+padding:14px;
+margin-bottom:12px;
+border-radius:16px;
+border:1px solid var(--border)
+}
 
-/* ===== MOBILE ===== */
-@media(max-width:768px){
-.calendar{grid-template-columns:1fr}
-.day-header{display:none}
-.day-cell{min-height:auto}
-.date{font-size:1.1rem}
-.controls{flex-direction:column;align-items:stretch}
-.modal-content{margin:0;height:100vh;border-radius:0;max-width:none}
+/* DESKTOP */
+@media(min-width:769px){
+.calendar{display:grid;grid-template-columns:repeat(7,1fr)}
+.day-header{display:block}
+.summary{grid-template-columns:repeat(4,1fr)}
+.controls{flex-direction:row}
 }
 </style>
 </head>
@@ -93,17 +180,17 @@ padding:25px;border-radius:25px}
 <div class="container">
 
 <div class="summary">
-<div class="stat"><span>📘 เรียน</span><b id="sStudy">0</b></div>
-<div class="stat"><span>📕 การบ้าน</span><b id="sHomework">0</b></div>
-<div class="stat"><span>🎧 ส่วนตัว</span><b id="sPersonal">0</b></div>
-<div class="stat"><span>📌 รวม</span><b id="sTotal">0</b></div>
+<div class="stat">📘 เรียน <b id="sStudy">0</b></div>
+<div class="stat">📕 การบ้าน <b id="sHomework">0</b></div>
+<div class="stat">🎧 ส่วนตัว <b id="sPersonal">0</b></div>
+<div class="stat">📌 รวม <b id="sTotal">0</b></div>
 </div>
 
 <div class="controls">
 <div class="month-nav">
-<button onclick="changeMonth(-1)">❮</button>
+<button onclick="changeMonth(-1)">‹</button>
 <div id="monthYear"></div>
-<button onclick="changeMonth(1)">❯</button>
+<button onclick="changeMonth(1)">›</button>
 </div>
 <button onclick="logout()">ออกจากระบบ</button>
 </div>
@@ -112,21 +199,7 @@ padding:25px;border-radius:25px}
 </div>
 </div>
 
-<div class="modal" id="modal">
-<div class="modal-content">
-<h3 id="modalTitle">เพิ่มกิจกรรม</h3>
-<input id="activityText" placeholder="ชื่อกิจกรรม">
-<input id="activityTime" type="time">
-<select id="activityType">
-<option value="study">📘 เรียน</option>
-<option value="homework">📕 การบ้าน</option>
-<option value="personal">🎧 ส่วนตัว</option>
-</select>
-<button onclick="saveActivity()">บันทึก</button>
-<button onclick="closeModal()">ยกเลิก</button>
-</div>
-</div>
-
+<!-- JS ทั้งหมดเหมือนเดิม -->
 <script>
 const SHEET_API =
   "https://script.google.com/macros/s/AKfycbyQG7_mxX0p3cPLxtLY8CQ-RsjHWaJ_u4StXd0_3-hSO5ZK39YgAsoeQO_P3VF1qG6o8Q/exec";
