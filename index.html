@@ -16,7 +16,9 @@
     --text-main:#1e293b;
     --text-sub:#64748b;
     --border:#e2e8f0;
-    --shadow:0 10px 25px rgba(0,0,0,.1);
+
+    --shadow-soft:0 8px 20px rgba(0,0,0,.08);
+    --shadow-deep:0 18px 45px rgba(0,0,0,.12);
 
     --cls-study:#10b981;
     --cls-homework:#f59e0b;
@@ -24,7 +26,11 @@
 }
 
 *{box-sizing:border-box;font-family:'Prompt',sans-serif}
-body{margin:0;background:var(--bg);color:var(--text-main);overflow-x:hidden}
+body{
+    margin:0;
+    background:linear-gradient(180deg,#f1f5f9,#f8fafc);
+    color:var(--text-main);
+}
 
 /* ---------- LOGIN ---------- */
 .login-page{
@@ -39,9 +45,9 @@ body{margin:0;background:var(--bg);color:var(--text-main);overflow-x:hidden}
     max-width:360px;
     background:#fff;
     padding:40px 30px;
-    border-radius:28px;
+    border-radius:30px;
     text-align:center;
-    box-shadow:0 30px 60px rgba(0,0,0,.25);
+    box-shadow:0 30px 70px rgba(0,0,0,.35);
 }
 .login-box h2{margin-bottom:25px;color:var(--primary)}
 .login-box input{
@@ -62,30 +68,36 @@ body{margin:0;background:var(--bg);color:var(--text-main);overflow-x:hidden}
 }
 
 /* ---------- APP ---------- */
-#app{display:none;padding:14px}
-header{text-align:center;margin-bottom:12px}
-header h1{margin:0;color:var(--primary);font-size:1.5rem}
+#app{display:none;padding:20px}
+header{text-align:center;margin-bottom:14px}
+header h1{
+    margin:0;
+    color:var(--primary);
+    font-size:1.6rem;
+    text-shadow:0 2px 4px rgba(0,0,0,.08);
+}
 
 .container{
     background:var(--card);
-    border-radius:26px;
-    padding:16px;
-    box-shadow:var(--shadow);
+    border-radius:30px;
+    padding:20px;
+    box-shadow:var(--shadow-deep); /* PC FIX */
 }
 
 /* ---------- SUMMARY ---------- */
 .summary{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-    margin-bottom:16px;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:18px;
 }
 .stat{
-    background:var(--bg);
-    border-radius:16px;
-    padding:12px;
+    background:linear-gradient(180deg,#fff,#f8fafc);
+    border-radius:18px;
+    padding:14px;
     text-align:center;
     border:1px solid var(--border);
+    box-shadow:var(--shadow-soft); /* PC FIX */
 }
 .stat span{font-size:.8rem;color:var(--text-sub)}
 .stat b{font-size:1.4rem;color:var(--primary)}
@@ -95,7 +107,7 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:12px;
+    margin-bottom:14px;
 }
 .month-nav{
     display:flex;
@@ -104,44 +116,55 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
 }
 #monthYear{
     font-weight:600;
-    min-width:120px;
+    min-width:140px;
     text-align:center;
-    font-size:1rem;
 }
 .btn-icon{
-    width:36px;
-    height:36px;
+    width:38px;
+    height:38px;
     border-radius:50%;
     border:none;
-    background:var(--bg);
+    background:#f1f5f9;
+    box-shadow:var(--shadow-soft);
 }
 .logout-btn{
     background:#fee2e2;
     color:#dc2626;
     border:none;
-    padding:6px 12px;
-    border-radius:10px;
-    font-size:.85rem;
+    padding:8px 14px;
+    border-radius:12px;
 }
 
 /* ---------- CALENDAR ---------- */
 .calendar{
     display:grid;
     grid-template-columns:repeat(7,1fr);
-    gap:4px;
+    gap:8px;
 }
 .day-header{
     text-align:center;
-    font-size:.65rem;
+    font-size:.7rem;
     color:var(--text-sub);
 }
+
+/* HEIGHT FIX */
 .day-cell{
     background:#fff;
     border:1px solid var(--border);
-    border-radius:12px;
-    min-height:74px;
-    padding:5px;
+    border-radius:16px;
+    height:130px;              /* 🔒 ล็อกความสูง */
+    padding:6px;
+    overflow-y:auto;           /* ✅ ไม่ขยาย */
+    box-shadow:var(--shadow-soft);
 }
+.day-cell::-webkit-scrollbar{
+    width:4px;
+}
+.day-cell::-webkit-scrollbar-thumb{
+    background:#c7d2fe;
+    border-radius:10px;
+}
+
 .weekend{background:#fcfcfd}
 
 .date{
@@ -149,12 +172,13 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
     font-weight:600;
     display:flex;
     justify-content:space-between;
+    margin-bottom:2px;
 }
 .today-mark{
     background:var(--primary);
     color:#fff;
-    width:20px;
-    height:20px;
+    width:22px;
+    height:22px;
     border-radius:50%;
     display:flex;
     justify-content:center;
@@ -164,10 +188,10 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
 
 /* ---------- ACTIVITY ---------- */
 .activity{
-    margin-top:3px;
-    padding:3px 5px;
-    border-radius:6px;
-    font-size:9px;
+    margin-top:4px;
+    padding:4px 6px;
+    border-radius:7px;
+    font-size:10px;
     color:#fff;
     white-space:nowrap;
     overflow:hidden;
@@ -176,7 +200,11 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
 .study{background:var(--cls-study)}
 .homework{background:var(--cls-homework)}
 .personal{background:var(--cls-personal)}
-.edit,.delete{font-size:9px}
+.edit,.delete{
+    font-size:9px;
+    margin-left:4px;
+    opacity:.85;
+}
 
 /* ---------- MODAL ---------- */
 .modal{
@@ -192,13 +220,14 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
     max-width:380px;
     margin:8vh auto;
     padding:22px;
-    border-radius:24px;
+    border-radius:26px;
+    box-shadow:0 40px 80px rgba(0,0,0,.4);
 }
 .modal-content input,
 .modal-content select{
     width:100%;
     padding:12px;
-    border-radius:12px;
+    border-radius:14px;
     margin-bottom:10px;
     border:1px solid var(--border);
 }
@@ -212,13 +241,19 @@ header h1{margin:0;color:var(--primary);font-size:1.5rem}
     color:#fff;
     border:none;
     padding:12px;
-    border-radius:12px;
+    border-radius:14px;
 }
 .btn-cancel{
     flex:1;
     border:none;
     padding:12px;
-    border-radius:12px;
+    border-radius:14px;
+}
+
+/* ---------- MOBILE ---------- */
+@media(max-width:768px){
+    .summary{grid-template-columns:repeat(2,1fr)}
+    .day-cell{height:110px}
 }
 </style>
 </head>
