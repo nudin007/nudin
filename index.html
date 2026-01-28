@@ -200,16 +200,28 @@
             justify-content: space-between;
             align-items: center;
             animation: fadeIn 0.3s ease;
+            overflow: hidden; /* ป้องกันเนื้อหาล้น */
         }
+        
+        /* แก้ไขส่วนของข้อความให้ยืดหยุ่น */
+        .activity span {
+            flex: 1; 
+            min-width: 0; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis;
+            margin-right: 4px;
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         
         .study { background: var(--cls-study); }
         .homework { background: var(--cls-homework); }
         .personal { background: var(--cls-personal); }
         
-        .activity-tools { display: flex; gap: 8px; opacity: 0; } /* เพิ่ม gap เล็กน้อย */
+        .activity-tools { display: flex; gap: 4px; opacity: 0; flex-shrink: 0; }
         .activity:hover .activity-tools { opacity: 1; }
-        .activity-tools span { cursor: pointer; padding: 4px; display: inline-block; }
+        .activity-tools span { cursor: pointer; padding: 2px 4px; display: inline-block; }
 
         /* ---------- MODAL ---------- */
         .modal {
@@ -245,25 +257,35 @@
         .btn-save { flex: 2; background: var(--primary); color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; }
         .btn-cancel { flex: 1; background: #f1f5f9; border: none; padding: 12px; border-radius: 12px; cursor: pointer; }
 
-        /* ---------- MOBILE RESPONSIVE (จุดที่แก้ไข) ---------- */
+        /* ---------- MOBILE RESPONSIVE ---------- */
         @media (max-width: 768px) {
             .summary { grid-template-columns: repeat(2, 1fr); }
             .calendar { gap: 5px; }
-            .day-cell { min-height: 110px; padding: 6px; }
-            .day-header { font-size: 0.75rem; padding: 5px 0; }
-            .activity { font-size: 0.7rem; padding: 6px 8px; flex-direction: row; }
+            .day-cell { min-height: 100px; padding: 4px; }
+            .day-header { font-size: 0.7rem; padding: 5px 0; }
             
-            /* แก้ไขตรงนี้เพื่อให้ปุ่มโชว์ตลอดเวลาในมือถือและกดง่ายขึ้น */
+            .activity { 
+                font-size: 0.65rem; 
+                padding: 4px 6px; 
+                margin-bottom: 3px;
+            }
+            
+            /* ให้ปุ่มเครื่องมือแสดงตลอดและลดขนาดลงเล็กน้อยในมือถือ */
             .activity-tools { 
                 opacity: 1 !important; 
                 display: flex !important; 
-                background: rgba(0,0,0,0.15); 
-                border-radius: 6px;
-                margin-left: 4px;
+                gap: 2px;
             }
             .activity-tools span {
-                font-size: 14px; /* ขยายขนาดไอคอนให้กดง่าย */
-                padding: 2px 6px;
+                font-size: 11px;
+                padding: 1px 3px;
+                background: rgba(0,0,0,0.1);
+                border-radius: 4px;
+            }
+            
+            /* บังคับให้ข้อความแสดงผลแม้จอจะแคบ */
+            .activity span {
+                display: inline-block;
             }
         }
     </style>
@@ -386,7 +408,7 @@
             data.forEach((a, i) => {
                 sum[a.type]++; sum.total++;
                 cell += `<div class="activity ${a.type}">
-                    <span style="overflow:hidden; text-overflow:ellipsis;"><b>${a.time}</b> ${a.text}</span>
+                    <span><b>${a.time}</b> ${a.text}</span>
                     <div class="activity-tools">
                         <span onclick="editActivity(event, '${key}', ${i})">✎</span>
                         <span onclick="deleteActivity(event, '${key}', ${i})">✖</span>
@@ -438,7 +460,7 @@
     }
 
     function editActivity(e, k, i) {
-        e.stopPropagation(); // สำคัญมาก: ป้องกันไม่ให้ไปติด onclick ของ day-cell
+        e.stopPropagation(); 
         const data = JSON.parse(localStorage.getItem(k));
         const a = data[i];
         selectedDay = k.split('-')[2];
@@ -451,7 +473,7 @@
     }
 
     function deleteActivity(e, k, i) {
-        e.stopPropagation(); // สำคัญมาก: ป้องกันไม่ให้ไปติด onclick ของ day-cell
+        e.stopPropagation(); 
         if(!confirm('ยืนยันการลบกิจกรรมนี้?')) return;
         let d = JSON.parse(localStorage.getItem(k));
         d.splice(i, 1);
