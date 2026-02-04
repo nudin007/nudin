@@ -186,7 +186,7 @@ header h1 {
     font-size: 0.8rem;
 }
 
-/* ⭐ FIX ข้อความกิจกรรมให้แสดงครบถ้วน */
+/* ACTIVITY */
 .activity {
     padding: 5px 8px;
     border-radius: 8px;
@@ -194,16 +194,16 @@ header h1 {
     color: white;
     margin-bottom: 4px;
     display: flex;
-    flex-direction: column; /* ให้เครื่องมืออยู่บรรทัดใหม่ถ้าจำเป็น */
+    flex-direction: column;
     gap: 2px;
-    word-break: break-word; /* หักคำที่ยาวเกินไป */
+    word-break: break-word;
     overflow: visible;
 }
 
 .activity span {
     line-height: 1.3;
     display: block;
-    white-space: normal; /* บังคับให้หักบรรทัด */
+    white-space: normal;
 }
 
 .activity b { font-weight: 600; margin-right: 3px; }
@@ -215,12 +215,13 @@ header h1 {
 .activity-tools {
     display: flex;
     justify-content: flex-end;
-    gap: 6px;
+    gap: 8px;
     opacity: 0;
     margin-top: 2px;
 }
 .activity:hover .activity-tools { opacity: 1; }
-.activity-tools span { cursor: pointer; padding: 2px; }
+.activity-tools span { cursor: pointer; padding: 2px; transition: transform 0.1s; }
+.activity-tools span:hover { transform: scale(1.2); }
 
 /* MODAL */
 .modal {
@@ -269,17 +270,8 @@ header h1 {
     .day-header { font-size: 0.7rem; padding: 2px; }
     .date { font-size: 0.75rem; margin-bottom: 4px; }
     
-    .activity {
-        font-size: 0.65rem;
-        padding: 3px 5px;
-        border-radius: 5px;
-    }
-    
-    /* ในมือถือให้ปุ่มลบแสดงตลอดเวลาเพื่อให้กดง่าย */
-    .activity-tools {
-        opacity: 1 !important;
-        font-size: 0.7rem;
-    }
+    .activity { font-size: 0.65rem; padding: 3px 5px; border-radius: 5px; }
+    .activity-tools { opacity: 1 !important; font-size: 0.75rem; }
 }
 </style>
 </head>
@@ -337,21 +329,17 @@ header h1 {
 </div>
 
 <script>
-/* -----------------------------------------------------------
-   LOGIC การทำงานเดิมทั้งหมด (รักษาไว้ 100%)
-   ----------------------------------------------------------- */
 const SHEET_API = "https://script.google.com/macros/s/AKfycbyQG7_mxX0p3cPLxtLY8CQ-RsjHWaJ_u4StXd0_3-hSO5ZK39YgAsoeQO_P3VF1qG6o8Q/exec";
 const USER_CONFIG = { user: "F4N", pass: "1234" };
 
+/* AUTH LOGIC */
 function login() {
     const u = document.getElementById('username').value;
     const p = document.getElementById('password').value;
     if (u === USER_CONFIG.user && p === USER_CONFIG.pass) {
         localStorage.setItem('smart_calendar_auth', 'true');
         showApp();
-    } else {
-        alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
-    }
+    } else { alert('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง'); }
 }
 
 function logout() {
@@ -365,9 +353,11 @@ function showApp() {
     renderCalendar();
 }
 
+/* CALENDAR LOGIC */
 const todayIcon = "🐰";
 let currentDate = new Date();
 let selectedDay = null;
+let editIndex = null; // ⭐ เพิ่มตัวแปรเก็บ Index สำหรับการแก้ไข
 const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
 
 function renderCalendar() {
@@ -383,7 +373,6 @@ function renderCalendar() {
     const firstDay = new Date(y, m, 1).getDay();
     const lastDate = new Date(y, m + 1, 0).getDate();
 
-    // ช่องว่างก่อนวันแรกของเดือน
     for (let i = 0; i < firstDay; i++) calendarEl.innerHTML += '<div></div>';
 
     const today = new Date();
@@ -407,6 +396,7 @@ function renderCalendar() {
             cell += `<div class="activity ${a.type}">
                 <span><b>${a.time}</b> ${a.text}</span>
                 <div class="activity-tools">
+                    <span onclick="editActivity(event,'${key}',${i})">✎</span>
                     <span onclick="deleteActivity(event,'${key}',${i})">✖</span>
                 </div>
             </div>`;
@@ -421,11 +411,29 @@ function renderCalendar() {
     document.getElementById('sTotal').innerText = sum.total;
 }
 
+/* MODAL & DATA LOGIC */
 function openModal(d) {
     selectedDay = d;
+    editIndex = null; // Reset สถานะเป็นเพิ่มใหม่
     document.getElementById('activityText').value = '';
     document.getElementById('activityTime').value = '';
     document.getElementById('modalTitle').innerText = `เพิ่มกิจกรรมวันที่ ${d}`;
+    document.getElementById('modal').style.display = 'flex';
+}
+
+// ⭐ ฟังก์ชันสำหรับการแก้ไข
+function editActivity(e, key, index) {
+    e.stopPropagation(); // กันไม่ให้ไปเปิด openModal ซ้อน
+    const data = JSON.parse(localStorage.getItem(key))[index];
+    const dateParts = key.split('-'); // [y, m, d]
+    
+    selectedDay = dateParts[2];
+    editIndex = index; // เก็บ Index ที่จะแก้ไข
+    
+    document.getElementById('activityText').value = data.text;
+    document.getElementById('activityTime').value = data.time;
+    document.getElementById('activityType').value = data.type;
+    document.getElementById('modalTitle').innerText = `แก้ไขกิจกรรมวันที่ ${selectedDay}`;
     document.getElementById('modal').style.display = 'flex';
 }
 
@@ -445,14 +453,27 @@ function saveActivity() {
     const key = `${y}-${m}-${selectedDay}`;
     let data = JSON.parse(localStorage.getItem(key)) || [];
 
-    data.push({ text, time, type });
+    if (editIndex !== null) {
+        // กรณีแก้ไขข้อมูลเดิม
+        data[editIndex] = { text, time, type };
+    } else {
+        // กรณีเพิ่มข้อมูลใหม่
+        data.push({ text, time, type });
+    }
+    
     localStorage.setItem(key, JSON.stringify(data));
 
-    // ส่งข้อมูลไป Google Sheets
+    // ⭐ รักษาการส่งข้อมูลไป Google Sheets
     fetch(SHEET_API, {
         method: "POST",
         mode: "no-cors",
-        body: JSON.stringify({ date: `${y}-${m + 1}-${selectedDay}`, text, time, type })
+        body: JSON.stringify({ 
+            date: `${y}-${m + 1}-${selectedDay}`, 
+            text, 
+            time, 
+            type,
+            status: editIndex !== null ? "Edit" : "New" 
+        })
     });
 
     renderCalendar();
@@ -473,7 +494,6 @@ function changeMonth(n) {
     renderCalendar();
 }
 
-// ตรวจสอบสถานะ Login
 if (localStorage.getItem('smart_calendar_auth') === 'true') showApp();
 </script>
 </body>
